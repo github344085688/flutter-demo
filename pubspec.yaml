@@ -1,0 +1,33 @@
+name: flutter_demo
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+  shared:
+    path: ../_shared
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  permission_handler: ^5.1.0+2
+  provider: ^4.3.3
+  flutter_svg: ^0.19.1 #自定义图标
+  flutter_staggered_grid_view: ^0.3.4 #瀑布流布局
+  flutter_screenutil: ^4.0.4+1 #屏幕适配
+  flutter_swiper: ^1.1.6
+  pull_to_refresh: 1.6.3
+  flutter_gifimage: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/icom/
+    - assets/json/creads.json
+    - assets/json/potos.json
