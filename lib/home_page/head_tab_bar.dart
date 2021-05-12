@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/components/screenApdar.dart';
 class HeadTabBar extends StatefulWidget {
   const HeadTabBar({Key key}) : super(key: key);
 
@@ -17,7 +18,7 @@ class _HeadTabBar extends State<HeadTabBar> {
             Expanded(
                 flex: 10,
                 child: Container(
-                  height: 35.0,
+                  height: ScreenApdar.setHeight(30),
                   padding: EdgeInsets.all(0),
                   child: TabBar(
                     tabs: <Widget>[
@@ -58,7 +59,7 @@ class _HeadTabBar extends State<HeadTabBar> {
             Expanded(
                 flex: 2,
                 child: Container(
-                  height: 35.0,
+                  height: ScreenApdar.setHeight(30),
                   width: double.infinity,
                   padding: EdgeInsets.all(0),
                   child: IconButton(

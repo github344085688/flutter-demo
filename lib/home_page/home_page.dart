@@ -26,7 +26,7 @@ class _HomePage extends State<HomePage> {
   double _initBarHeight = 85;
   double _searchRight = 0;
   double _searchButtom = -12.0;
-  double _setBarHeight = 60;
+  double _setBarHeight = 57.9;
   double _opacity = 1.0;
   double _toolbarHeight = 85;
   double _appBarOpacity = 1;
@@ -130,7 +130,8 @@ class _HomePage extends State<HomePage> {
       if (_scrollController.offset >= 0 && _scrollController.offset < 34) {
         setState(() {
           _systemUiOverlayStyle = SystemUiOverlayStyle.light;
-          _toolbarHeight = _initBarHeight - _scrollController.offset * 0.715;
+          _toolbarHeight = _initBarHeight - _scrollController.offset * 0.8;
+          print(_toolbarHeight);
           _opacity = (100 - _scrollController.offset * 2.5).round() / 100;
         });
       }
@@ -199,9 +200,9 @@ class _HomePage extends State<HomePage> {
       slivers: <Widget>[
         SliverPadding(
             padding: EdgeInsets.only(
-              top: _initBarHeight,
-              left: 10.0,
-              right: 10.0,
+              top: ScreenApdar.setHeight(_initBarHeight),
+              left: ScreenApdar.setWidth(10),
+              right: ScreenApdar.setWidth(10),
             ),
             sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -209,7 +210,9 @@ class _HomePage extends State<HomePage> {
                 return HeadTabBar();
               },
               childCount: 1,
-            ))),
+            )
+            )
+        ),
         SliverList(
             delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {

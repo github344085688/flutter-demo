@@ -28,7 +28,16 @@ class _HomePage extends State<NewPage> {
 
   Widget _refreshConfiguration() {
     return RefreshConfiguration(
-        child:TwoLevelExample() );
+        child:Padding(
+            padding:EdgeInsets.only(top:150),
+          child: SizedBox(
+            width: 250.0,
+            height: 24.0,
+            child:TwoLevelExample(),
+          ),
+        ),
+
+         );
   }
 
   @override
