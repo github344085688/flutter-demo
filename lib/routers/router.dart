@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/home_page/home_page5.dart';
+// import 'package:flutter_demo/home_page/home_page5.dart';
 import 'package:flutter_demo/home_page/home_page.dart';
 import 'package:flutter_demo/faxian_page/faxian.dart';
 import 'package:flutter_demo/my_mine_page/my_mine_page.dart';
@@ -12,7 +12,7 @@ final routes = {
   // '/': (context) => NewPage(),
   '/': (context) => HomePage(),
   // '/classification': (context) => Faxian(),
-  '/classification': (context) => HomePage5(),
+  '/classification': (context) => HomePage(),
   '/myMine': (context) => MyMinePage(),
   // '/new': (context) => TwoLevelExample(),
   '/new': (context) => NewPage(),

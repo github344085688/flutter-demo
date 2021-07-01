@@ -1,8 +1,9 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter_demo/home_page/list/allList.dart';
 import 'package:flutter_demo/components/app_bar_widge.dart';
-import 'package:flutter_demo/home_page/head_tab_bar.dart';
+import 'package:flutter_demo/style/style.dart';
 import 'package:flutter_demo/components/swiper_widget.dart';
 import 'package:flutter_demo/home_page/floating_action_but.dart';
 import 'package:flutter_demo/home_page/two_level_widget.dart';
@@ -22,7 +23,7 @@ class HomePage extends StatefulWidget {
   _HomePage createState() => _HomePage();
 }
 
-class _HomePage extends State<HomePage> {
+class _HomePage extends State<HomePage> with TickerProviderStateMixin {
   double _initBarHeight = 85;
   double _searchRight = 0;
   double _searchButtom = -12.0;
@@ -35,13 +36,58 @@ class _HomePage extends State<HomePage> {
   int _swiperChangedIndex = 0;
   bool _isPhysics = false;
   bool _isScroll = false;
-  SystemUiOverlayStyle _systemUiOverlayStyle = SystemUiOverlayStyle.light;
+  SystemUiOverlayStyle _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
 
   List _expandStateList = [];
 
   ScrollController _scrollController = new ScrollController();
   RefreshController _refreshController = RefreshController();
   GlobalKey _contentKey = GlobalKey();
+
+  List _bannerColors = [
+    Color.fromRGBO(3, 21, 64, 1),
+    Color.fromRGBO(246, 131, 200, 1),
+    Color.fromRGBO(131, 236, 238, 1),
+    Color.fromRGBO(254, 168, 187, 1),
+    Color.fromRGBO(103, 111, 209, 1),
+  ];
+  List<Map> moudles = [
+    {
+      'img': "assets/images/bannerTitle.svg",
+      'bgColor': ComponentStyle.MALL_FOCUS_BG,
+      'moudleColor': ComponentStyle.DIVIDER_COLOR,
+      'listbanexData': listbanexData,
+      'isSeckill': 'true'
+    },
+    {
+      'img': "assets/images/bannerTitle2.svg",
+      'bgColor': ComponentStyle.PRIMARY_COLOR,
+      'moudleColor': ComponentStyle.MAIN_COLOR,
+      'listbanexData': listbanexData,
+    }
+  ];
+
+  int _recordwiperSIndex = 0;
+  AnimationController animationController;
+  Animation<Color> color;
+
+  _initAnimation(
+    Color _beginColor,
+    Color _endColor,
+  ) {
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    color = ColorTween(
+      begin: _beginColor,
+      end: _endColor,
+    ).animate(animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    animationController.forward();
+  }
+
   _currentIndex(BuildContext context, int changedIndex) {
     setState(() {
       currentIndex = changedIndex;
@@ -55,10 +101,21 @@ class _HomePage extends State<HomePage> {
   _swiperChanged(index) {
     setState(() {
       _swiperChangedIndex = index;
+
+      if (index == 0) {
+        _initAnimation(
+            _bannerColors[_bannerColors.length - 1], _bannerColors[index]);
+        _recordwiperSIndex = index;
+        return;
+      }
+      if (index > _recordwiperSIndex) {
+        _initAnimation(_bannerColors[index - 1], _bannerColors[index]);
+      } else {
+        _initAnimation(_bannerColors[index + 1], _bannerColors[index]);
+      }
+      _recordwiperSIndex = index;
     });
   }
-
-
 
   void init() async {
     var setData = await asset.get('assets/json/creads.json');
@@ -68,12 +125,8 @@ class _HomePage extends State<HomePage> {
   }
 
   void _onLoading() async {
-    print('_onLoading');
-    // monitor network fetch
     await Future.delayed(Duration(milliseconds: 2000));
     var getData = await asset.get('assets/json/potos.json');
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length+1).toString());
     if (mounted)
       setState(() {
         _expandStateList.addAll(json.decode(getData));
@@ -84,8 +137,7 @@ class _HomePage extends State<HomePage> {
   void _fuRefreshController() {
     _refreshController.headerMode.addListener(() {
       if (_refreshController.headerMode.value == RefreshStatus.idle) {
-        setState(() {
-        });
+        setState(() {});
         Future.delayed(const Duration(milliseconds: 20)).then((value) {
           setState(() {});
         });
@@ -114,14 +166,23 @@ class _HomePage extends State<HomePage> {
       var appBarOpacity = 1 - (distance * 2.8).round() / 100;
       setState(() {
         _appBarOpacity = appBarOpacity > 0 ? appBarOpacity : 0;
-        if (_isScroll && distance < 50 ) _scrollController.jumpTo(0.0 - 0.0);
+        if (_isScroll && distance < 50) _scrollController.jumpTo(0.0 - 0.0);
       });
     }
-    if(distance > 130) _isScroll = false;
+    if (distance > 130) _isScroll = false;
   }
 
   void _funScrollController() {
     _scrollController.addListener(() {
+      print(_scrollController.offset);
+      if (_scrollController.offset >= 0 && _scrollController.offset < 19) {
+        setState(() {
+          _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
+        });
+      }
+      if (_scrollController.offset >= 0 && _scrollController.offset > 19) {
+        _systemUiOverlayStyle = SystemUiOverlayStyle.light;
+      }
       if (_scrollController.offset > 34) {
         setState(() {
           _toolbarHeight = _setBarHeight;
@@ -129,15 +190,14 @@ class _HomePage extends State<HomePage> {
       }
       if (_scrollController.offset >= 0 && _scrollController.offset < 34) {
         setState(() {
-          _systemUiOverlayStyle = SystemUiOverlayStyle.light;
+          // _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
           _toolbarHeight = _initBarHeight - _scrollController.offset * 0.8;
-          print(_toolbarHeight);
+          // print(_toolbarHeight);
           _opacity = (100 - _scrollController.offset * 2.5).round() / 100;
         });
-      }
-      else if (_scrollController.offset > 30) {
+      } else if (_scrollController.offset > 30) {
         setState(() {
-          _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
+          // _systemUiOverlayStyle = SystemUiOverlayStyle.light;
           _opacity = 0.0;
         });
       }
@@ -158,10 +218,9 @@ class _HomePage extends State<HomePage> {
       _refreshController.position.jumpTo(0);
       setState(() {});
     });
+    _initAnimation(_bannerColors[0], _bannerColors[0]);
     super.initState();
   }
-
-
 
   Widget _getScrollWidget() {
     return Builder(
@@ -200,34 +259,67 @@ class _HomePage extends State<HomePage> {
       slivers: <Widget>[
         SliverPadding(
             padding: EdgeInsets.only(
-              top: ScreenApdar.setHeight(_initBarHeight),
-              left: ScreenApdar.setWidth(10),
-              right: ScreenApdar.setWidth(10),
+              top: ScreenApdar.setHeight(0),
+              left: ScreenApdar.setWidth(0),
+              right: ScreenApdar.setWidth(0),
             ),
             sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return HeadTabBar();
+                return Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(
+                    top: ScreenApdar.setHeight(_initBarHeight),
+                    left: ScreenApdar.setWidth(10),
+                    right: ScreenApdar.setWidth(10),
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        color.value,
+                        Theme.of(context).scaffoldBackgroundColor
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // HeadTabBar(),
+                      SwiperWidget(
+                          indexChanged: (currentIndex) =>
+                              _swiperChanged(currentIndex)),
+                    ],
+                  ),
+                );
               },
               childCount: 1,
-            )
-            )
-        ),
+            ))),
         SliverList(
             delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return Column(
               children: [
-                SwiperWidget(
-                    indexChanged: (currentIndex) =>
-                        _swiperChanged(currentIndex)),
                 HomeComponents(context).navGroupMenuWidget(),
-                HomeComponents(context).companyGroup(),
-                Column(
+                // moudles.map((e) => HomeComponents(context).companyGroup(e)),
+                HomeComponents(context).companyGroup(moudles[0]),
+                HomeComponents(context).companyGroup(moudles[1]),
+                Container(
+                 width: double.infinity,
+                  height:ScreenApdar.setHeight(95.0),
+                  margin: EdgeInsets.only(top:ScreenApdar.setHeight(10.0)),
+                  child:HomeComponents(context).svgAsset('assets/images/banner_cap.svg'),
+                )
+                /* Column(
+                  children: goulpkuData
+                      .map((e) => HomeComponents(context).theirCoupons(e))
+                      .toList(),
+                ),*/
+                /*  Column(
                   children: goulpkuData
                       .map((e) => HomeComponents(context).ipsumGroup(e))
                       .toList(),
-                ),
+                ),*/
               ],
             );
           },
@@ -263,7 +355,7 @@ class _HomePage extends State<HomePage> {
                     // 很重要的属性,这会影响你打开二楼和关闭二楼的动画效果
                     alignment: Alignment.topCenter),
               ),
-              twoLevelWidget: TwoLevelWidget(setActivity:(){
+              twoLevelWidget: TwoLevelWidget(setActivity: () {
                 print('wwwwwwwwwwww');
               }),
             ),
@@ -271,7 +363,7 @@ class _HomePage extends State<HomePage> {
 
         child: Stack(
           children: [
-            HomeComponents(context).appBarbg(_swiperChangedIndex),
+            // HomeComponents(context).appBarbg(_swiperChangedIndex),
             Scaffold(
               backgroundColor: Color(0x00000000),
               body: _getScrollWidget(),
@@ -306,5 +398,9 @@ class _HomePage extends State<HomePage> {
         child: Scaffold(
             resizeToAvoidBottomInset: false, body: _refreshConfiguration()));
   }
-}
 
+  dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+}

@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 List<Map> listbanexData = [
-  {"imagUrl": "assets/images/av1.png"},
-  {"imagUrl": "assets/images/av2.png"},
-  {"imagUrl": "assets/images/av3.png"},
-  {"imagUrl": "assets/images/av4.png"},
+  {"imagUrl": "assets/images/av1.png",
+    'price':10,
+    'orPrice':200
+  },
+  {"imagUrl": "assets/images/av2.png",
+    'price':20,
+    'orPrice':210},
+  {"imagUrl": "assets/images/av3.png",
+    'price':50,
+    'orPrice':580},
+  {"imagUrl": "assets/images/av4.png",
+    'price':300,
+    'orPrice':1500},
+  {"imagUrl": "assets/images/av5.png",
+    'price':20,
+    'orPrice':100},
+  {"imagUrl": "assets/images/av6.png",
+    'price':10,
+    'orPrice':100},
+  {"imagUrl": "assets/images/av7.png",
+    'price':5,
+    'orPrice':50},
 ];
 List<Map> girdMenuWidgetData = [
   {'icon': Icons.delivery_dining},
@@ -23,22 +41,24 @@ List<Map> goulpkuData  = [
     'topiconColor': Color(0xffD48731),
     'containerColor': Color(0xffF6D1A7),
     'title':'01',
-    'lable':'Lorem Ipsum',
-    'text':'Lorem ipsum dolor sit amet, '
-        'consectetur adipiscing elitv. '
-        'Proin sed neque sed lorem hendrerit ',
+    'lable':'蛋黄女王IP人物形象设计',
+    'text':'此篇仅发布了个人创作部分， '
+        '蛋黄女王IP含有全套图库，'
+        '可供授权  ',
+    'bgUrl':'assets/images/banner_bg.png'
   },
   {
     'bgiconColor': Color(0xffEF5C63),
     'topiconColor': Color(0xffBF4A4F),
     'containerColor': Color(0xffFFE0E2),
     'title':'02',
-    'lable':'Lorem Ipsum',
-    'text':'Lorem ipsum dolor sit amet, '
-        'consectetur adipiscing elitv. '
-        'Proin sed neque sed lorem hendrerit ',
+    'lable':'项目练练手',
+    'text':'最近想找个小项目练练手, '
+        '图像主题色提取，颜色量子化， '
+        '由图像生成调色板， ',
+    'bgUrl':'assets/images/banner_bg.png'
   },
-  {
+ /* {
     'bgiconColor': Color(0xff2DA0D1),
     'topiconColor': Color(0xff1383AA),
     'containerColor': Color(0xffCCF2FF),
@@ -67,7 +87,7 @@ List<Map> goulpkuData  = [
     'text':'Lorem ipsum dolor sit amet, '
         'consectetur adipiscing elitv. '
         'Proin sed neque sed lorem hendrerit ',
-  },
+  },*/
 ];
 
 List <Map> bannerColors = [

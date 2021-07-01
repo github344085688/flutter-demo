@@ -22,7 +22,7 @@ class _SwiperWidget extends State<SwiperWidget> {
 
   @override
   Widget build(BuildContext context) => Container(
-        height: 100,
+        height: 150,
         decoration: BoxDecoration(
         ),
         child: Swiper(
@@ -31,8 +31,7 @@ class _SwiperWidget extends State<SwiperWidget> {
           autoplay: true,
           viewportFraction: 1,
           scale: 1,
-          autoplayDelay: 5000,
-          // controller:
+          autoplayDelay: 10000,
           onIndexChanged:(index)=>{
             widget._indexChanged(index)
           },
@@ -59,9 +58,9 @@ class _SwiperWidget extends State<SwiperWidget> {
                   })),
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              margin: EdgeInsets.only(left: 10,right: 10,top:5.0),
+              margin: EdgeInsets.only(left: 7.0,right: 7.0,top:5.0),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                   image: DecorationImage(
                       image: AssetImage(
                         imageList[index]["url"],
@@ -71,4 +70,8 @@ class _SwiperWidget extends State<SwiperWidget> {
           },
         ),
       );
+  dispose() {
+    // animationController.dispose();
+    super.dispose();
+  }
 }

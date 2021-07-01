@@ -5,6 +5,7 @@ import 'package:flutter_demo/provider/provider_date.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/routers/router.dart';
+import 'package:flutter_demo/style/style.dart';
 
 final List<Permission> needPermissionList = [
   Permission.location,
@@ -52,7 +53,7 @@ class _MyMainAppState extends State<_InitMainState> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp, //只能纵向
       // DeviceOrientation.portraitDown,//只能纵向
@@ -61,13 +62,13 @@ class _MyMainAppState extends State<_InitMainState> {
       initialRoute: '/',
       title: 'My Main App Flutter',
       theme: ThemeData.light().copyWith(
-        iconTheme: IconThemeData(color: Color(0xFF62DEFF)),//用于Icon颜色
-        primaryColor: Color(0xFF012831),
-        accentColor: Color(0xFF012831),
-        indicatorColor: Color(0xFF198886),
-        dividerColor: Color(0xFF62DEFF),
-        scaffoldBackgroundColor: Color(0xFF012831),
-        textTheme: TextTheme(bodyText1: TextStyle(color:Color(0xFF62DEFF))),
+        iconTheme: IconThemeData(color: ComponentStyle.PRIMARY_COLOR),
+        primaryColor: ComponentStyle.MAIN_COLOR,
+        accentColor: ComponentStyle.DIVIDER_COLOR,
+        indicatorColor: ComponentStyle.PRIMARY_COLOR,
+        dividerColor: ComponentStyle.ACCENT_COLOR,
+        scaffoldBackgroundColor: ComponentStyle.LINE_COLOR,
+        textTheme: TextTheme(bodyText1: TextStyle(color: ComponentStyle.INDICATOR_COLOR)),
       ),
       routes: routes,
       // home: MainLayout(),
@@ -75,5 +76,4 @@ class _MyMainAppState extends State<_InitMainState> {
       onGenerateRoute: onGenerateRoute,
     );
   }
-
 }

@@ -1,13 +1,5 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
-import 'package:flutter_demo/components/screenApdar.dart';
-import 'package:flutter_demo/home_page/home_components/home_components.dart'
-    show HomeComponents, HeadTabBars;
-import 'package:flutter/services.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter_demo/news-page/twolevel_refresh.dart';
-
 class NewPage extends StatefulWidget {
   const NewPage({Key key}) : super(key: key);
 
@@ -15,37 +7,79 @@ class NewPage extends StatefulWidget {
   _HomePage createState() => _HomePage();
 }
 
-class _HomePage extends State<NewPage> {
+class _HomePage extends State<NewPage> with TickerProviderStateMixin{
 
+  AnimationController _animationController;
 
-  SystemUiOverlayStyle _systemUiOverlayStyle = SystemUiOverlayStyle.light;
-
-
-
-
-
-
-
-  Widget _refreshConfiguration() {
-    return RefreshConfiguration(
-        child:Padding(
-            padding:EdgeInsets.only(top:150),
-          child: SizedBox(
-            width: 250.0,
-            height: 24.0,
-            child:TwoLevelExample(),
-          ),
-        ),
-
-         );
+  String get hoursString {
+    Duration duration = _animationController.duration * _animationController.value;
+    return '${(duration.inHours)..toString().padLeft(2, '0')}';
   }
 
-  @override
+  String get minutesString {
+    Duration duration = _animationController.duration * _animationController.value;
+    return '${(duration.inMinutes % 60).toString().padLeft(2, '0')}';
+  }
+
+  String get secondsString {
+    Duration duration = _animationController.duration * _animationController.value;
+    return '${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
+
+ /* void initState() {
+    //倒计时,注意vsync:this，这里需要混入TickerProviderStateMixin
+    _animationController = AnimationController(vsync: this, duration: Duration(hours: 10, minutes: 30, seconds: 0));
+    _animationController.reverse(from: _animationController.value == 0.0 ? 1.0 : _animationController.value);
+  }*/
+
+
   Widget build(BuildContext context) {
-    ScreenApdar.init(context);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: _systemUiOverlayStyle,
-        child: Scaffold(
-            resizeToAvoidBottomInset: false, body: _refreshConfiguration()));
+    return
+      AnimatedBuilder(
+          animation: _animationController,
+          builder: (_, Widget child) {
+            return Row(children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+               child: Column(
+                 children: [
+                   Text(
+                     secondsString,
+                     style: TextStyle(
+                       color: Colors.white,
+                     ),
+                   ), Text(
+                     hoursString,
+                     style: TextStyle(
+                       color: Colors.white,
+                     ),
+                   ), Text(
+                     minutesString,
+                     style: TextStyle(
+                       color: Colors.white,
+                     ),
+                   ),
+                 ],
+               )
+               /* child: Container(
+                  color: Colors.red,
+                  child: Text(
+                    secondsString,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),*/
+              ),
+            ]);
+          });
+
+  }
+
+
+  dispose() {
+    // animationController.dispose();
+    super.dispose();
   }
 }
+

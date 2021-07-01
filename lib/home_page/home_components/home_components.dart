@@ -1,17 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_demo/home_page/list/allList.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_demo/style/style.dart';
+import 'package:flutter_demo/components/screenApdar.dart';
+import 'package:flutter_demo/components/timersSetting.dart';
+
 import 'dart:math';
 import 'dart:typed_data';
+
 class HomeComponents {
   BuildContext _context;
-  SvgPicture _bannerTitle = new SvgPicture.asset(
-    "assets/images/bannerTitle.svg",
-    color: Colors.white,
-    height: 80.0,
-  );
+
+  svgPictureAsset({String url, Color svgColor}) {
+    return new SvgPicture.asset(
+      url,
+      color: svgColor,
+    );
+  }
 
   HomeComponents(BuildContext context) {
     _context = context;
@@ -27,25 +35,32 @@ class HomeComponents {
 
   Widget _navGroupWidget(Map data) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(8),
       child: CircleAvatar(
-        backgroundColor: Theme.of(_context).primaryColor,
+        backgroundColor: ComponentStyle.TITLE_TEXT_COLOR,
         child: Container(
-          height: 30.0,
-          width: 30.0,
+          height: 34.0,
+          width: 34.0,
           padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
-            //背景装饰
             borderRadius: BorderRadius.all(Radius.circular(50)),
-            gradient: RadialGradient(
-                colors: [Color(0x23008D83), Color(0x2303c7c3)],
-                center: Alignment.topLeft,
-                radius: 20),
+            gradient: RadialGradient(colors: [
+              ComponentStyle.MALL_FOCUS_BG,
+              ComponentStyle.DIVIDER_COLOR
+            ], center: Alignment.topLeft, radius: 20),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(1, 1),
+                color: Color(0xff2f363e),
+                blurRadius: 1.6,
+                spreadRadius: -0.5,
+              )
+            ],
           ),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50)),
-              color: Theme.of(_context).primaryColor,
+              color: ComponentStyle.LINE_COLOR,
             ),
             child: Icon(
               data['icon'],
@@ -69,7 +84,11 @@ class HomeComponents {
     return Container(
       width: double.infinity,
       height: 90.0,
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+      padding: EdgeInsets.only(
+          top: ScreenApdar.setHeight(5.0),
+          bottom: ScreenApdar.setHeight(5.0),
+          left: ScreenApdar.setWidth(10.0),
+          right: ScreenApdar.setWidth(10.0)),
       child: Stack(
         children: [
           Positioned(
@@ -88,7 +107,17 @@ class HomeComponents {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: gou['containerColor'],
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                image: DecorationImage(
+                    image: AssetImage(gou['bgUrl']), fit: BoxFit.fitHeight),
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0.5, 1),
+                    color: ComponentStyle.MALL_FOCUS_BG,
+                    blurRadius: 1,
+                    spreadRadius: -0.5,
+                  )
+                ],
               ),
             ),
           ),
@@ -99,28 +128,44 @@ class HomeComponents {
                 svgbannerBg("assets/images/banner_bg.svg", gou['bgiconColor']),
           ),
           Positioned(
+            top: 31.0,
+            left: 10,
+            child: Text(
+              gou['title'],
+              style: TextStyle(
+                shadows: [
+                  BoxShadow(
+                    offset: Offset(-1.5, 2),
+                    color: ComponentStyle.INDICATOR_COLOR,
+                    blurRadius: 5,
+                    spreadRadius: -1,
+                  )
+                ],
+                color: ComponentStyle.MAIN_COLOR,
+                fontSize: 40.0,
+              ),
+            ),
+          ),
+          Positioned(
               width: 65.0,
               height: 2.0,
               top: 68.0,
               left: 0,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(-3, 2),
+                      color: ComponentStyle.INDICATOR_COLOR,
+                      blurRadius: 0.6,
+                      spreadRadius: -2,
+                    )
+                  ],
+                  color: ComponentStyle.DIVIDER_COLOR,
                 ),
               )),
           Positioned(
-            top: 28.0,
-            left: 10,
-            child: Text(
-              gou['title'],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.0,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 5.0,
+            top: 10.0,
             right: 10,
             child: Text(
               gou['lable'],
@@ -131,7 +176,7 @@ class HomeComponents {
             ),
           ),
           Positioned(
-              top: 25.0,
+              top: 30.0,
               bottom: 0,
               left: 120.0,
               right: 10,
@@ -150,7 +195,21 @@ class HomeComponents {
     );
   }
 
-  Widget companyGroup() {
+  Widget theirCoupons(Map gou) {
+    return Container(
+      height: 100,
+      width: 100,
+      transform: Matrix4.rotationZ(pi / 4),
+      decoration: BoxDecoration(color: Colors.green),
+    );
+  }
+
+  Widget svgAsset(String url){
+    return svgPictureAsset(url: url);
+  }
+
+  Widget companyGroup(Map group) {
+    List<Map> _listbanexData = group['listbanexData'];
     return Container(
         height: 90.0,
         width: double.infinity,
@@ -162,14 +221,39 @@ class HomeComponents {
               flex: 1,
               child: Container(
                 height: double.infinity,
-                padding: EdgeInsets.only(left: 12.0, right: 5.0),
                 decoration: BoxDecoration(
-                  color: Color(0xffda4d65),
+                  color: group['bgColor'],
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      bottomLeft: Radius.circular(15)),
+                      topLeft: Radius.circular(4.0),
+                      bottomLeft: Radius.circular(4.0)),
                 ),
-                child: _bannerTitle,
+                child: group['isSeckill'] != null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: ScreenApdar.setWidth(20.0),
+                            height: ScreenApdar.setHeight(25.0),
+                            margin: EdgeInsets.only(top: 5.0),
+                            child: svgPictureAsset(url: group['img']),
+                          ),
+                          Container(
+                            width: ScreenApdar.setWidth(16.0),
+                            child: TimersSetting(),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: ScreenApdar.setWidth(13.0),
+                            height: ScreenApdar.setHeight(60.0),
+                            margin: EdgeInsets.only(top: 10.0),
+                            child: svgPictureAsset(url: group['img']),
+                          ),
+                        ],
+                      ),
               ),
             ),
             Expanded(
@@ -178,15 +262,15 @@ class HomeComponents {
                 height: double.infinity,
                 padding: EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
-                  color: Color(0xfff2f2f2),
+                  color: group['moudleColor'],
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(15),
-                      bottomRight: Radius.circular(15)),
+                      topRight: Radius.circular(4.0),
+                      bottomRight: Radius.circular(4.0)),
                 ),
-                child: Flex(
-                    direction: Axis.horizontal,
-                    children: listbanexData
-                        .map((e) => _banexpanded(e['imagUrl']))
+                child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: _listbanexData
+                        .map((e) => _banexpanded(e))
                         .toList()),
               ),
             ),
@@ -194,20 +278,63 @@ class HomeComponents {
         ));
   }
 
-  Widget _banexpanded(String images) {
-    return Expanded(
-        flex: 15,
-        child: Container(
-          height: double.infinity,
-          padding: EdgeInsets.all(5.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Image.asset(
-            images,
-            fit: BoxFit.contain,
-          ),
-        ));
+  Widget _banexpanded(Map listMap) {
+    return Container(
+        width: ScreenApdar.setWidth(77.0),
+        child: Card(
+            child: Container(
+                height: double.infinity,
+                margin: EdgeInsets.all(0),
+                padding: EdgeInsets.only(
+                    left: ScreenApdar.setWidth(0),
+                    bottom: ScreenApdar.setWidth(0),
+                    right: ScreenApdar.setWidth(0)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    image: DecorationImage(
+                        image: AssetImage(listMap['imagUrl']), fit: BoxFit.fill)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        width: double.infinity,
+                        height: ScreenApdar.setHeight(1),
+                        color: ComponentStyle.LINE_COLOR),
+                    Container(
+                      width: double.infinity,
+                      height: ScreenApdar.setHeight(13.0),
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(
+                          left: ScreenApdar.setWidth(3),
+                          right: ScreenApdar.setWidth(3)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(4),
+                            bottomRight: Radius.circular(4)),
+                        color: Color.fromRGBO(44, 52, 65, 0.6),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        verticalDirection: VerticalDirection.up,
+                        children: <Widget>[
+                          Text('¥ ${listMap['price']}',
+                              style: TextStyle(
+                                color: ComponentStyle.LINE_COLOR,
+                                fontSize: 14.0,
+                              )),
+                          Text('¥ ${listMap['orPrice']}',
+                              style: TextStyle(
+                                color: ComponentStyle.DIVIDER_COLOR,
+                                fontSize: 8.0,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor:ComponentStyle.DIVIDER_COLOR,
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                ))));
   }
 
   List<IntSize> _createSizes(int count) {
@@ -216,9 +343,7 @@ class HomeComponents {
         count, (i) => IntSize(rnd.nextInt(500) + 200, rnd.nextInt(800) + 200));
   }
 
-
   Widget getStaggeredView(List goodsList) {
-
     return SliverStaggeredGrid.countBuilder(
       crossAxisCount: 4,
       itemCount: goodsList.length,
@@ -271,13 +396,12 @@ class HomeComponents {
       crossAxisSpacing: 5.0,
     );
   }
+
   Widget getStaggeredView2(List expandStateList) {
     return SliverStaggeredGrid.countBuilder(
       crossAxisCount: 4,
       staggeredTileBuilder: (_) => const StaggeredTile.fit(2),
-      itemBuilder: (context, index) => _Tile2(
-          expandStateList[index]['img'],
-          6),
+      itemBuilder: (context, index) => _Tile2(expandStateList[index]['img'], 6),
       itemCount: expandStateList.length,
     );
   }
@@ -440,13 +564,13 @@ List<IntSize> _createSizes(int count) {
       count, (i) => IntSize(rnd.nextInt(500) + 200, rnd.nextInt(800) + 200));
 }
 
-
 class IntSize {
   const IntSize(this.width, this.height);
 
   final int width;
   final int height;
 }
+
 class _Tile extends StatelessWidget {
   const _Tile(this.index, this.size);
 
@@ -499,6 +623,7 @@ class StaggeredGrids extends StatelessWidget {
 
   static const int _kItemCount = 20;
   final List<IntSize> _sizes;
+
   @override
   Widget build(BuildContext context) {
     return SliverStaggeredGrid.countBuilder(
