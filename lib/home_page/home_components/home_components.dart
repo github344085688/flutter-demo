@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_demo/home_page/list/allList.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_demo/style/style.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
 import 'package:flutter_demo/components/timersSetting.dart';
+import 'package:flutter_demo/components/imgProcessing.dart';
 
 import 'dart:math';
 import 'dart:typed_data';
@@ -14,12 +14,6 @@ import 'dart:typed_data';
 class HomeComponents {
   BuildContext _context;
 
-  svgPictureAsset({String url, Color svgColor}) {
-    return new SvgPicture.asset(
-      url,
-      color: svgColor,
-    );
-  }
 
   HomeComponents(BuildContext context) {
     _context = context;
@@ -73,12 +67,6 @@ class HomeComponents {
     );
   }
 
-  Widget svgbannerBg(String svgUrl, Color color) {
-    return SvgPicture.asset(
-      svgUrl,
-      color: color,
-    );
-  }
 
   Widget ipsumGroup(Map gou) {
     return Container(
@@ -94,7 +82,7 @@ class HomeComponents {
           Positioned(
             top: 74.0,
             left: 94.0,
-            child: svgbannerBg(
+            child: ImgProcessing.svgbannerBg(
                 "assets/images/banner_bg_bt.svg", gou['topiconColor']),
           ),
           Positioned(
@@ -125,7 +113,7 @@ class HomeComponents {
             width: 100.0,
             height: 80.0,
             child:
-                svgbannerBg("assets/images/banner_bg.svg", gou['bgiconColor']),
+            ImgProcessing.svgbannerBg("assets/images/banner_bg.svg", gou['bgiconColor']),
           ),
           Positioned(
             top: 31.0,
@@ -195,25 +183,13 @@ class HomeComponents {
     );
   }
 
-  Widget theirCoupons(Map gou) {
-    return Container(
-      height: 100,
-      width: 100,
-      transform: Matrix4.rotationZ(pi / 4),
-      decoration: BoxDecoration(color: Colors.green),
-    );
-  }
-
-  Widget svgAsset(String url){
-    return svgPictureAsset(url: url);
-  }
 
   Widget companyGroup(Map group) {
     List<Map> _listbanexData = group['listbanexData'];
     return Container(
         height: 90.0,
         width: double.infinity,
-        margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0),
+        margin: EdgeInsets.only(left: ScreenApdar.setWidth(10.0), right:ScreenApdar.setWidth(10.0), top: ScreenApdar.setHeight(5.0)),
         child: Flex(
           direction: Axis.horizontal,
           children: [
@@ -235,7 +211,7 @@ class HomeComponents {
                             width: ScreenApdar.setWidth(20.0),
                             height: ScreenApdar.setHeight(25.0),
                             margin: EdgeInsets.only(top: 5.0),
-                            child: svgPictureAsset(url: group['img']),
+                            child: ImgProcessing.svgPictureAsset(url: group['img']),
                           ),
                           Container(
                             width: ScreenApdar.setWidth(16.0),
@@ -250,7 +226,7 @@ class HomeComponents {
                             width: ScreenApdar.setWidth(13.0),
                             height: ScreenApdar.setHeight(60.0),
                             margin: EdgeInsets.only(top: 10.0),
-                            child: svgPictureAsset(url: group['img']),
+                            child: ImgProcessing.svgPictureAsset(url: group['img']),
                           ),
                         ],
                       ),
@@ -269,9 +245,8 @@ class HomeComponents {
                 ),
                 child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: _listbanexData
-                        .map((e) => _banexpanded(e))
-                        .toList()),
+                    children:
+                        _listbanexData.map((e) => _banexpanded(e)).toList()),
               ),
             ),
           ],
@@ -292,7 +267,8 @@ class HomeComponents {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(4)),
                     image: DecorationImage(
-                        image: AssetImage(listMap['imagUrl']), fit: BoxFit.fill)),
+                        image: AssetImage(listMap['imagUrl']),
+                        fit: BoxFit.fill)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -328,7 +304,7 @@ class HomeComponents {
                                 color: ComponentStyle.DIVIDER_COLOR,
                                 fontSize: 8.0,
                                 decoration: TextDecoration.lineThrough,
-                                decorationColor:ComponentStyle.DIVIDER_COLOR,
+                                decorationColor: ComponentStyle.DIVIDER_COLOR,
                               ))
                         ],
                       ),
@@ -337,11 +313,6 @@ class HomeComponents {
                 ))));
   }
 
-  List<IntSize> _createSizes(int count) {
-    final rnd = Random();
-    return List.generate(
-        count, (i) => IntSize(rnd.nextInt(500) + 200, rnd.nextInt(800) + 200));
-  }
 
   Widget getStaggeredView(List goodsList) {
     return SliverStaggeredGrid.countBuilder(
@@ -397,11 +368,14 @@ class HomeComponents {
     );
   }
 
-  Widget getStaggeredView2(List expandStateList) {
-    return SliverStaggeredGrid.countBuilder(
+  Widget productsListView(List expandStateList) {
+   return SliverStaggeredGrid.countBuilder(
       crossAxisCount: 4,
+      mainAxisSpacing: ScreenApdar.setWidth(2.0),
+      crossAxisSpacing: ScreenApdar.setHeight(2.0),
       staggeredTileBuilder: (_) => const StaggeredTile.fit(2),
-      itemBuilder: (context, index) => _Tile2(expandStateList[index]['img'], 6),
+      itemBuilder: (context, index) =>
+          ProductDisplay(expandStateList[index], 6),
       itemCount: expandStateList.length,
     );
   }
@@ -423,7 +397,7 @@ class HomeComponents {
               top: 50.0,
               width: 120.0,
               height: 80.0,
-              child: HomeComponents(_context).svgbannerBg(
+              child:  ImgProcessing.svgbannerBg(
                   "assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['fuColor']),
             ),
@@ -432,7 +406,7 @@ class HomeComponents {
               top: 50.0,
               width: 160.0,
               height: 90.0,
-              child: HomeComponents(_context).svgbannerBg(
+              child: ImgProcessing.svgbannerBg(
                   "assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['fuColor']),
             ),
@@ -441,7 +415,7 @@ class HomeComponents {
               top: 0.0,
               width: 250.0,
               height: 180.0,
-              child: HomeComponents(_context).svgbannerBg(
+              child: ImgProcessing.svgbannerBg(
                   "assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['maiColor']),
             ),
@@ -458,29 +432,62 @@ class HomeComponents {
   }
 }
 
-class _Tile2 extends StatelessWidget {
-  const _Tile2(this.source, this.index);
+class ProductDisplay extends StatelessWidget {
+  const ProductDisplay(this.source, this.index);
 
-  final String source;
+  final Map source;
   final int index;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
+      // margin:EdgeInsets.only(left:10.0, right: 10.0),
       child: Column(
         children: <Widget>[
-          Image.network(source),
+          Image.asset(
+            source['img'],
+            fit: BoxFit.fitHeight,
+          ),
+          // Image.network(source),
           Padding(
-            padding: const EdgeInsets.all(4),
+            padding: EdgeInsets.only(
+              left: ScreenApdar.setWidth(8.0),
+              right: ScreenApdar.setWidth(8.0),
+              bottom: ScreenApdar.setHeight(8.0),
+            ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  'Image number $index',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    source['username'],
+                    style: TextStyle(color: ComponentStyle.INDICATOR_COLOR),
+                  ),
                 ),
-                const Text(
-                  'Vincent Van Gogh',
-                  style: TextStyle(color: Colors.grey),
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    verticalDirection: VerticalDirection.up,
+                    children: <Widget>[
+                      Text(
+                        "¥",
+                        style: TextStyle(color: Colors.red, fontSize: 12.0),
+                      ),
+                      Text(
+                        source['price'].toString(),
+                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                      ),
+                      Text(
+                        '${source['want'].toString()} 人付款',
+                        style: TextStyle(
+                            color: ComponentStyle.DIVIDER_COLOR,
+                            fontSize: 10.0),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

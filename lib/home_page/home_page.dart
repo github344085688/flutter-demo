@@ -5,6 +5,7 @@ import 'package:flutter_demo/home_page/list/allList.dart';
 import 'package:flutter_demo/components/app_bar_widge.dart';
 import 'package:flutter_demo/style/style.dart';
 import 'package:flutter_demo/components/swiper_widget.dart';
+import 'package:flutter_demo/components/swiper_tages_widget.dart';
 import 'package:flutter_demo/home_page/floating_action_but.dart';
 import 'package:flutter_demo/home_page/two_level_widget.dart';
 import 'package:flutter_demo/main_page/bottom_navigation_view.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_demo/home_page/home_components/home_components.dart'
 import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_demo/servers/json_servers.dart' show asset;
+import 'package:flutter_demo/components/imgProcessing.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -88,15 +90,6 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
     animationController.forward();
   }
 
-  _currentIndex(BuildContext context, int changedIndex) {
-    setState(() {
-      currentIndex = changedIndex;
-      NavigationAdmin(context).BottomNavigation(changedIndex);
-      if (currentIndex == 3) {
-        currentIndex = 0;
-      }
-    });
-  }
 
   _swiperChanged(index) {
     setState(() {
@@ -300,32 +293,48 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
           (BuildContext context, int index) {
             return Column(
               children: [
-                HomeComponents(context).navGroupMenuWidget(),
+                SwiperTagesWidget(),
+               /* HomeComponents(context).navGroupMenuWidget(),*/
                 // moudles.map((e) => HomeComponents(context).companyGroup(e)),
                 HomeComponents(context).companyGroup(moudles[0]),
                 HomeComponents(context).companyGroup(moudles[1]),
                 Container(
-                 width: double.infinity,
-                  height:ScreenApdar.setHeight(95.0),
-                  margin: EdgeInsets.only(top:ScreenApdar.setHeight(10.0)),
-                  child:HomeComponents(context).svgAsset('assets/images/banner_cap.svg'),
-                )
-                /* Column(
-                  children: goulpkuData
-                      .map((e) => HomeComponents(context).theirCoupons(e))
-                      .toList(),
-                ),*/
-                /*  Column(
-                  children: goulpkuData
-                      .map((e) => HomeComponents(context).ipsumGroup(e))
-                      .toList(),
-                ),*/
+                  width: double.infinity,
+                  height: ScreenApdar.setHeight(95.0),
+                  margin: EdgeInsets.only(
+                      left: ScreenApdar.setWidth(5.0),
+                      right: ScreenApdar.setWidth(5.0)),
+                  child: Flex(direction: Axis.horizontal, children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        child: ImgProcessing.svgPictureAsset(
+                            url: 'assets/images/banner_left.svg'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        child: ImgProcessing.svgPictureAsset(
+                            url: 'assets/images/banner_right.svg'),
+                      ),
+                    ),
+                  ]),
+                ),
               ],
             );
           },
           childCount: 1,
         )),
-        HomeComponents(context).getStaggeredView2(_expandStateList),
+        SliverPadding(
+            padding: EdgeInsets.only(
+              top: ScreenApdar.setHeight(0),
+              left: ScreenApdar.setWidth(5.0),
+              right: ScreenApdar.setWidth(5.0),
+              bottom:ScreenApdar.setHeight(30.0),
+            ),
+            sliver: HomeComponents(context).productsListView(_expandStateList)),
+        // HomeComponents(context).productsListView(_expandStateList),
       ],
     );
   }
@@ -341,7 +350,6 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
         enableRefreshVibrate: false,
         enableLoadMoreVibrate: false,
         shouldFooterFollowWhenNotFull: (state) {
-          // If you want load more with noMoreData state ,may be you should return false
           return false;
         },
         footerBuilder: () => ClassicFooter(),
@@ -367,16 +375,6 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
             Scaffold(
               backgroundColor: Color(0x00000000),
               body: _getScrollWidget(),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: Builder(
-                builder: (context) => FloatingActionBut(),
-              ),
-              bottomNavigationBar: BottomNavigationView(
-                  currentIndex: currentIndex,
-                  setActivity: (currentIndex) =>
-                      _currentIndex(context, currentIndex)),
-              extendBody: true,
             ),
             AppBarWidge(
                 setBarHeight: _setBarHeight,
@@ -390,13 +388,38 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
         ));
   }
 
+
+
+  _currentIndex(BuildContext context, int changedIndex) {
+    setState(() {
+      currentIndex = changedIndex;
+      NavigationAdmin(context).BottomNavigation(changedIndex);
+      if (currentIndex == 3) {
+        currentIndex = 0;
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     ScreenApdar.init(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: _systemUiOverlayStyle,
         child: Scaffold(
-            resizeToAvoidBottomInset: false, body: _refreshConfiguration()));
+          resizeToAvoidBottomInset: false,
+          body: _refreshConfiguration(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Builder(
+            builder: (context) => FloatingActionBut(),
+          ),
+          bottomNavigationBar: BottomNavigationView(
+              currentIndex: currentIndex,
+              setActivity: (currentIndex) =>
+                  _currentIndex(context, currentIndex)),
+          extendBody: true,
+        ));
   }
 
   dispose() {

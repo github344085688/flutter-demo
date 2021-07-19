@@ -31,3 +31,4 @@ flutter:
     - assets/images/icom/
     - assets/json/creads.json
     - assets/json/potos.json
+    - assets/json/tages.json
