@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/style/style.dart';
 
 class FloatingActionBut extends StatefulWidget {
-  const FloatingActionBut({Key key}) : super(key: key);
+  final setActivity;
+  final currentIndex;
+  const FloatingActionBut({Key key, this.currentIndex, this.setActivity }) : super(key: key);
 
   @override
   _FloatingActionBut createState() => _FloatingActionBut();
@@ -12,7 +14,9 @@ class FloatingActionBut extends StatefulWidget {
 class _FloatingActionBut extends State<FloatingActionBut> {
   @override
   Widget build(BuildContext context) => FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => {
+          if(widget.currentIndex != 4) widget.setActivity?.call(4),
+        },
         child: Container(
             width: double.infinity,
             height: double.infinity,

@@ -410,14 +410,14 @@ class _Faxian extends State<Faxian> {
     ScreenApdar.init(context);
     return Scaffold(
       body: _getScrollWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      /*floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Builder(
         builder: (context) => FloatingActionBut(),
-      ),
-      bottomNavigationBar: BottomNavigationView(
+      ),*/
+    /*  bottomNavigationBar: BottomNavigationView(
           currentIndex: currentIndex,
-          setActivity: (currentIndex) => _currentIndex(currentIndex)),
-      extendBody: true,
+          setActivity: (currentIndex) => _currentIndex(currentIndex)),*/
+      // extendBody: true,
     );
   }
 }

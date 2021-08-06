@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/routers/router.dart';
 import 'package:flutter_demo/style/style.dart';
 
+import 'package:flutter_demo/my_mine_page/my_mine_page.dart';
+
+import 'package:flutter_demo/home_page/home_page.dart';
 final List<Permission> needPermissionList = [
   Permission.location,
   Permission.storage,
@@ -31,7 +34,9 @@ class _InitMainState extends StatefulWidget {
   _MyMainAppState createState() => _MyMainAppState();
 }
 
-class _MyMainAppState extends State<_InitMainState> {
+class _MyMainAppState extends State<_InitMainState>{
+  final _globalNavigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +63,9 @@ class _MyMainAppState extends State<_InitMainState> {
       DeviceOrientation.portraitUp, //只能纵向
       // DeviceOrientation.portraitDown,//只能纵向
     ]);
+    var  _navigatorKey = NavigatorKey(navigatorKey:_globalNavigatorKey);
     return MaterialApp(
+      navigatorKey:_globalNavigatorKey,
       initialRoute: '/',
       title: 'My Main App Flutter',
       theme: ThemeData.light().copyWith(
@@ -70,10 +77,8 @@ class _MyMainAppState extends State<_InitMainState> {
         scaffoldBackgroundColor: ComponentStyle.LINE_COLOR,
         textTheme: TextTheme(bodyText1: TextStyle(color: ComponentStyle.INDICATOR_COLOR)),
       ),
-      routes: routes,
-      // home: MainLayout(),
-      // Navigator.defaultRouteName: (context) => homeRoute,
-      onGenerateRoute: onGenerateRoute,
+      routes: _navigatorKey.routes(),
+      onGenerateRoute: _navigatorKey.onGenerateRoute,
     );
   }
 }

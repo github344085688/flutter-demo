@@ -215,7 +215,7 @@ class HomeComponents {
                           ),
                           Container(
                             width: ScreenApdar.setWidth(16.0),
-                            child: TimersSetting(),
+                            // child: TimersSetting(),
                           ),
                         ],
                       )

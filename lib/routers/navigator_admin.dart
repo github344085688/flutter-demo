@@ -7,18 +7,21 @@ class NavigationAdmin {
   }
 
   void BottomNavigation(int changedIndex) {
-    if (changedIndex == 0) {
-      Navigator.pushNamed(_context, '/');
-    }
-    if (changedIndex == 1) {
-      Navigator.pushNamed(_context, '/classification');
-    }
-    if (changedIndex == 2) {
-      Navigator.pushNamed(_context, '/myMine');
-    }
-    if (changedIndex == 3) {
-      Navigator.pushNamed(_context, '/new');
-    }
+    // if (changedIndex == 0) {
+    //   Navigator.pushNamed(_context, '/');
+    // }
+    // if (changedIndex == 1) {
+    //   Navigator.pushNamed(_context, '/classification');
+    // }
+    // if (changedIndex == 2) {
+    //   Navigator.pushNamed(_context, '/myMine');
+    // }
+    // if (changedIndex == 3) {
+    //   Navigator.pushNamed(_context, '/new');
+    // }
+    // if (changedIndex == 4) {
+    //   Navigator.pushNamed(_context, '/report');
+    // }
   }
 // @override
 // _BottomNavigation createState() => _BottomNavigation();

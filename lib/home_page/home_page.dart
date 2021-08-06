@@ -1,429 +1,106 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter_demo/home_page/list/allList.dart';
-import 'package:flutter_demo/components/app_bar_widge.dart';
-import 'package:flutter_demo/style/style.dart';
-import 'package:flutter_demo/components/swiper_widget.dart';
-import 'package:flutter_demo/components/swiper_tages_widget.dart';
 import 'package:flutter_demo/home_page/floating_action_but.dart';
-import 'package:flutter_demo/home_page/two_level_widget.dart';
 import 'package:flutter_demo/main_page/bottom_navigation_view.dart';
 import 'package:flutter_demo/routers/navigator_admin.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
-import 'package:flutter_demo/home_page/home_components/home_components.dart'
-    show HomeComponents, HeadTabBars;
+import 'package:flutter_demo/routers/router.dart';
 import 'package:flutter/services.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:flutter_demo/servers/json_servers.dart' show asset;
-import 'package:flutter_demo/components/imgProcessing.dart';
 
+import 'package:flutter_demo/my_mine_page/my_mine_page.dart';
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  final navigatorKey;
+  const HomePage({Key key,  this.navigatorKey}) : super(key: key);
 
   @override
   _HomePage createState() => _HomePage();
 }
 
+
 class _HomePage extends State<HomePage> with TickerProviderStateMixin {
-  double _initBarHeight = 85;
-  double _searchRight = 0;
-  double _searchButtom = -12.0;
-  double _setBarHeight = 57.9;
-  double _opacity = 1.0;
-  double _toolbarHeight = 85;
-  double _appBarOpacity = 1;
-  double _expandedHeight = 90;
-  int currentIndex = 0;
-  int _swiperChangedIndex = 0;
-  bool _isPhysics = false;
-  bool _isScroll = false;
-  SystemUiOverlayStyle _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
-
-  List _expandStateList = [];
-
-  ScrollController _scrollController = new ScrollController();
-  RefreshController _refreshController = RefreshController();
-  GlobalKey _contentKey = GlobalKey();
-
-  List _bannerColors = [
-    Color.fromRGBO(3, 21, 64, 1),
-    Color.fromRGBO(246, 131, 200, 1),
-    Color.fromRGBO(131, 236, 238, 1),
-    Color.fromRGBO(254, 168, 187, 1),
-    Color.fromRGBO(103, 111, 209, 1),
-  ];
-  List<Map> moudles = [
-    {
-      'img': "assets/images/bannerTitle.svg",
-      'bgColor': ComponentStyle.MALL_FOCUS_BG,
-      'moudleColor': ComponentStyle.DIVIDER_COLOR,
-      'listbanexData': listbanexData,
-      'isSeckill': 'true'
-    },
-    {
-      'img': "assets/images/bannerTitle2.svg",
-      'bgColor': ComponentStyle.PRIMARY_COLOR,
-      'moudleColor': ComponentStyle.MAIN_COLOR,
-      'listbanexData': listbanexData,
-    }
-  ];
-
-  int _recordwiperSIndex = 0;
-  AnimationController animationController;
-  Animation<Color> color;
-
-  _initAnimation(
-    Color _beginColor,
-    Color _endColor,
-  ) {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
-    color = ColorTween(
-      begin: _beginColor,
-      end: _endColor,
-    ).animate(animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    animationController.forward();
-  }
-
-
-  _swiperChanged(index) {
-    setState(() {
-      _swiperChangedIndex = index;
-
-      if (index == 0) {
-        _initAnimation(
-            _bannerColors[_bannerColors.length - 1], _bannerColors[index]);
-        _recordwiperSIndex = index;
-        return;
-      }
-      if (index > _recordwiperSIndex) {
-        _initAnimation(_bannerColors[index - 1], _bannerColors[index]);
-      } else {
-        _initAnimation(_bannerColors[index + 1], _bannerColors[index]);
-      }
-      _recordwiperSIndex = index;
-    });
-  }
-
-  void init() async {
-    var setData = await asset.get('assets/json/creads.json');
-    setState(() {
-      _expandStateList = json.decode(setData);
-    });
-  }
-
-  void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 2000));
-    var getData = await asset.get('assets/json/potos.json');
-    if (mounted)
-      setState(() {
-        _expandStateList.addAll(json.decode(getData));
-      });
-    _refreshController.loadComplete();
-  }
-
-  void _fuRefreshController() {
-    _refreshController.headerMode.addListener(() {
-      if (_refreshController.headerMode.value == RefreshStatus.idle) {
-        setState(() {});
-        Future.delayed(const Duration(milliseconds: 20)).then((value) {
-          setState(() {});
-        });
-      }
-    });
-  }
-
-  void _onRefresh() async {
-    print('_onRefresh');
-    setState(() {
-      _isPhysics = true;
-    });
-    await Future.delayed(Duration(milliseconds: 4000));
-    _isPhysics = false;
-    _refreshController.refreshCompleted();
-  }
-
-  void _onTwoLevel() {
-    setState(() {
-      _appBarOpacity = 0;
-    });
-  }
-
-  void _onOffsetChange(isBool, distance) {
-    if (isBool && distance >= 0) {
-      var appBarOpacity = 1 - (distance * 2.8).round() / 100;
-      setState(() {
-        _appBarOpacity = appBarOpacity > 0 ? appBarOpacity : 0;
-        if (_isScroll && distance < 50) _scrollController.jumpTo(0.0 - 0.0);
-      });
-    }
-    if (distance > 130) _isScroll = false;
-  }
-
-  void _funScrollController() {
-    _scrollController.addListener(() {
-      print(_scrollController.offset);
-      if (_scrollController.offset >= 0 && _scrollController.offset < 19) {
-        setState(() {
-          _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
-        });
-      }
-      if (_scrollController.offset >= 0 && _scrollController.offset > 19) {
-        _systemUiOverlayStyle = SystemUiOverlayStyle.light;
-      }
-      if (_scrollController.offset > 34) {
-        setState(() {
-          _toolbarHeight = _setBarHeight;
-        });
-      }
-      if (_scrollController.offset >= 0 && _scrollController.offset < 34) {
-        setState(() {
-          // _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
-          _toolbarHeight = _initBarHeight - _scrollController.offset * 0.8;
-          // print(_toolbarHeight);
-          _opacity = (100 - _scrollController.offset * 2.5).round() / 100;
-        });
-      } else if (_scrollController.offset > 30) {
-        setState(() {
-          // _systemUiOverlayStyle = SystemUiOverlayStyle.light;
-          _opacity = 0.0;
-        });
-      }
-      if (_toolbarHeight < 85) _isScroll = true;
-      if (_toolbarHeight == 85) _isScroll = false;
-
-      // if (_scrollController.offset == 0 && _isRefresh) _appBarOpacity = 1;
-    });
-  }
+  int _privatecurrentIndex = 0;
+  int _currentIndex = 0;
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
-    init();
-    _fuRefreshController();
-    _funScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('addPostFrameCallback');
-      _refreshController.position.jumpTo(0);
-      setState(() {});
-    });
-    _initAnimation(_bannerColors[0], _bannerColors[0]);
     super.initState();
   }
 
-  Widget _getScrollWidget() {
-    return Builder(
-        builder: (BuildContext context) => RefreshConfiguration.copyAncestor(
-              context: context,
-              enableScrollWhenTwoLevel: true,
-              maxOverScrollExtent: 120,
-              enableLoadingWhenFailed: true,
-              maxUnderScrollExtent: 100.0,
-              footerTriggerDistance: -45.0,
-              child: LayoutBuilder(
-                builder: (_, c) {
-                  return SmartRefresher(
-                    key: _contentKey,
-                    controller: _refreshController,
-                    enableTwoLevel: true,
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    onLoading: _onLoading,
-                    onRefresh: _onRefresh,
-                    onTwoLevel: _onTwoLevel,
-                    onOffsetChange: _onOffsetChange,
-                    child: _customScrollView(),
-                  );
-                },
-              ),
-            ));
-  }
-
-  Widget _customScrollView() {
-    return CustomScrollView(
-      controller: _scrollController,
-      physics: _isPhysics
-          ? NeverScrollableScrollPhysics()
-          : AlwaysScrollableScrollPhysics(),
-      slivers: <Widget>[
-        SliverPadding(
-            padding: EdgeInsets.only(
-              top: ScreenApdar.setHeight(0),
-              left: ScreenApdar.setWidth(0),
-              right: ScreenApdar.setWidth(0),
-            ),
-            sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    top: ScreenApdar.setHeight(_initBarHeight),
-                    left: ScreenApdar.setWidth(10),
-                    right: ScreenApdar.setWidth(10),
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        color.value,
-                        Theme.of(context).scaffoldBackgroundColor
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      // HeadTabBar(),
-                      SwiperWidget(
-                          indexChanged: (currentIndex) =>
-                              _swiperChanged(currentIndex)),
-                    ],
-                  ),
-                );
-              },
-              childCount: 1,
-            ))),
-        SliverList(
-            delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return Column(
-              children: [
-                SwiperTagesWidget(),
-               /* HomeComponents(context).navGroupMenuWidget(),*/
-                // moudles.map((e) => HomeComponents(context).companyGroup(e)),
-                HomeComponents(context).companyGroup(moudles[0]),
-                HomeComponents(context).companyGroup(moudles[1]),
-                Container(
-                  width: double.infinity,
-                  height: ScreenApdar.setHeight(95.0),
-                  margin: EdgeInsets.only(
-                      left: ScreenApdar.setWidth(5.0),
-                      right: ScreenApdar.setWidth(5.0)),
-                  child: Flex(direction: Axis.horizontal, children: [
-                    Expanded(
-                      flex: 1,
-                      child: Card(
-                        child: ImgProcessing.svgPictureAsset(
-                            url: 'assets/images/banner_left.svg'),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Card(
-                        child: ImgProcessing.svgPictureAsset(
-                            url: 'assets/images/banner_right.svg'),
-                      ),
-                    ),
-                  ]),
-                ),
-              ],
-            );
-          },
-          childCount: 1,
-        )),
-        SliverPadding(
-            padding: EdgeInsets.only(
-              top: ScreenApdar.setHeight(0),
-              left: ScreenApdar.setWidth(5.0),
-              right: ScreenApdar.setWidth(5.0),
-              bottom:ScreenApdar.setHeight(30.0),
-            ),
-            sliver: HomeComponents(context).productsListView(_expandStateList)),
-        // HomeComponents(context).productsListView(_expandStateList),
-      ],
-    );
-  }
-
-  Widget _refreshConfiguration() {
-    return RefreshConfiguration(
-        dragSpeedRatio: 0.91,
-        enableScrollWhenTwoLevel: true,
-        maxOverScrollExtent: 120,
-        footerTriggerDistance: -80,
-        maxUnderScrollExtent: 60,
-        enableLoadingWhenNoData: false,
-        enableRefreshVibrate: false,
-        enableLoadMoreVibrate: false,
-        shouldFooterFollowWhenNotFull: (state) {
-          return false;
-        },
-        footerBuilder: () => ClassicFooter(),
-        headerBuilder: () => TwoLevelHeader(
-              textStyle: TextStyle(color: Colors.white),
-              displayAlignment: TwoLevelDisplayAlignment.fromTop,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/secondfloor.jpg"),
-                    fit: BoxFit.fitWidth,
-                    // 很重要的属性,这会影响你打开二楼和关闭二楼的动画效果
-                    alignment: Alignment.topCenter),
-              ),
-              twoLevelWidget: TwoLevelWidget(setActivity: () {
-                print('wwwwwwwwwwww');
-              }),
-            ),
-        /*    headerBuilder:(BuildContext context)=>,*/
-
-        child: Stack(
-          children: [
-            // HomeComponents(context).appBarbg(_swiperChangedIndex),
-            Scaffold(
-              backgroundColor: Color(0x00000000),
-              body: _getScrollWidget(),
-            ),
-            AppBarWidge(
-                setBarHeight: _setBarHeight,
-                toolbarHeight: _toolbarHeight,
-                searchRight: _searchRight,
-                searchButtom: _searchButtom,
-                opacity: _opacity,
-                expandedHeight: _expandedHeight,
-                appBarOpacity: _appBarOpacity)
-          ],
-        ));
-  }
-
-
-
-  _currentIndex(BuildContext context, int changedIndex) {
+  _conterollercurrentIndex(BuildContext context, int changedIndex) {
+    // if(changedIndex==0&&_privatecurrentIndex!=0) _widgetPage = IndexPage();
     setState(() {
-      currentIndex = changedIndex;
+
+      if (changedIndex == 4 && _privatecurrentIndex != 4) {
+        _currentIndex = 1;
+        // Navigator.pushNamed(context, '/myMine');
+       /* Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                routeBuilders[TabNavigatorRoutes.root](context),
+          ),
+        );*/
+      }
+      // if(changedIndex==4&&_privatecurrentIndex!=4) _widgetPage =  InformationPage();
+      if(changedIndex==0&&_privatecurrentIndex!=0) _currentIndex = 0;
+      // if(changedIndex==0&&_privatecurrentIndex!=0) _widgetPage = IndexPage();
+      // _currentIndex = changedIndex;
+      _privatecurrentIndex = changedIndex;
       NavigationAdmin(context).BottomNavigation(changedIndex);
-      if (currentIndex == 3) {
-        currentIndex = 0;
+      if (_privatecurrentIndex == 3) {
+        _privatecurrentIndex = 0;
       }
     });
   }
+
 
 
   @override
   Widget build(BuildContext context) {
     ScreenApdar.init(context);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: _systemUiOverlayStyle,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: _refreshConfiguration(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Builder(
-            builder: (context) => FloatingActionBut(),
-          ),
-          bottomNavigationBar: BottomNavigationView(
-              currentIndex: currentIndex,
+    final _indexNavigatorKey = new NavigatorKey(navigatorKey:widget.navigatorKey,indexNavigatorKey:_navigatorKey);
+    return  WillPopScope(
+        onWillPop: () async {
+          final isFirstRouteInCurrentTab =
+              !await _navigatorKey.currentState.maybePop();
+         /* final isprFirstRouteInCurrentTab =
+          !await widget.navigatorKey.currentState.maybePop();*/
+          print('11111111111111111111${isFirstRouteInCurrentTab}');
+          // print('11111111111111111111prprprpr${isprFirstRouteInCurrentTab}');
+          // return false;
+       /*
+        if (isFirstRouteInCurrentTab) {
+          if (_currentTab != TabItem.red) {
+            _selectTab(TabItem.red);
+            return false;
+          }
+        }
+        // let system handle back button if we're on the first route
+        return isFirstRouteInCurrentTab;*/
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body:
+       Navigator(
+         key: _navigatorKey,
+         onGenerateRoute:_indexNavigatorKey.indexNavigatorRouters,
+      ),
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.miniCenterDocked,
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionBut(
+              currentIndex: _privatecurrentIndex,
               setActivity: (currentIndex) =>
-                  _currentIndex(context, currentIndex)),
-          extendBody: true,
-        ));
-  }
+                  _conterollercurrentIndex(context, currentIndex)
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationView(
+            currentIndex: _privatecurrentIndex,
+            setActivity: (currentIndex) =>
+                _conterollercurrentIndex(context, currentIndex)),
+        extendBody: true,
+      )
+    );
 
-  dispose() {
-    animationController.dispose();
-    super.dispose();
   }
 }
