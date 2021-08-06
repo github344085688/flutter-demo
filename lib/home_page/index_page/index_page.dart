@@ -1,14 +1,14 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter_demo/home_page/list/allList.dart';
+import 'package:flutter_demo/home_page/analog_datas/allList.dart';
 import 'package:flutter_demo/components/app_bar_widge.dart';
 import 'package:flutter_demo/style/style.dart';
 import 'package:flutter_demo/components/swiper_widget.dart';
 import 'package:flutter_demo/components/swiper_tages_widget.dart';
-import 'package:flutter_demo/home_page/two_level_widget.dart';
+import 'package:flutter_demo/home_page/index_page/two_level_widget.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
-import 'package:flutter_demo/home_page/home_components/home_components.dart'
+import 'package:flutter_demo/home_page/index_page/components/components.dart'
     show HomeComponents, HeadTabBars;
 import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

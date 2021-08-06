@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 
 // import 'package:flutter_demo/home_page/home_page5.dart';
 import 'package:flutter_demo/home_page/home_page.dart';
-import 'package:flutter_demo/faxian_page/faxian.dart';
 import 'package:flutter_demo/my_mine_page/my_mine_page.dart';
 import 'package:flutter_demo/news-page/new_page.dart';
-import 'package:flutter_demo/faxian_page/faxian.dart';
-import 'package:flutter_demo/main_page/main_layout.dart';
-import 'package:flutter_demo/useStage/twolevel_refresh.dart';
 import 'package:flutter_demo/home_page/information_page/information_page.dart';
 import 'package:flutter_demo/home_page/index_page/index_page.dart';
 import 'package:flutter_demo/home_page/information_page/information_page.dart';
@@ -24,11 +20,11 @@ class NavigatorKey {
   routes() => {
         // '/': (context) => NewPage(),
         '/': (context) => HomePage(navigatorKey: _navigatorKey),
+        '/myMine': (context) => MyMinePage(),
+        // '/myMine': (context) => MyMinePage(),
         '/report': (context) => InformationPage(),
         // '/classification': (context) => Faxian(),
-        '/classification': (context) => Faxian(),
-        '/myMine': (context) => MyMinePage(),
-        '/new': (context) => TwoLevelExample(),
+
         // '/new': (context) => NewPage(),
       };
 

@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'file:///D:/flutter-project/flutter_demo/lib/main_page/intercepte_main.dart';
+import 'package:flutter_demo/routers/intercepte_main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

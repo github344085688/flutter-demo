@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/home_page/floating_action_but.dart';
-import 'package:flutter_demo/main_page/bottom_navigation_view.dart';
-import 'package:flutter_demo/routers/navigator_admin.dart';
+import 'package:flutter_demo/home_page/bottom_navigation_view.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
 import 'package:flutter_demo/routers/router.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +45,6 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
       // if(changedIndex==0&&_privatecurrentIndex!=0) _widgetPage = IndexPage();
       // _currentIndex = changedIndex;
       _privatecurrentIndex = changedIndex;
-      NavigationAdmin(context).BottomNavigation(changedIndex);
       if (_privatecurrentIndex == 3) {
         _privatecurrentIndex = 0;
       }
