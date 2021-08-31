@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScreenApdar {
   static init(context) {
@@ -34,4 +38,13 @@ class ScreenApdar {
   static statusBarHeight() {
     return ScreenUtil().statusBarHeight;
   }
+
+  // 初始化设计稿尺寸
+  static final double dessignWidth = 375.0;
+  static final double dessignHeight = 1335.0;
+
+  // static final double statusBarHeight = MediaQueryData.fromWindow(window).padding.top;
+
+  // flutter_screenutil px转dp
+  // num dp(double dessignValue) => ScreenUtil.getInstance().setWidth(dessignValue);
 }

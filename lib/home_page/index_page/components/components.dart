@@ -6,18 +6,17 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_demo/style/style.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
 import 'package:flutter_demo/components/imgProcessing.dart';
+import 'package:flutter_demo/home_page/index_page/detail_page.dart';
+import 'package:flutter_demo/keys.dart';
 
 import 'dart:math';
 import 'dart:typed_data';
 
 class HomeComponents {
-  BuildContext _context;
+  BuildContext context;
+  HomeComponents( {this.context});
 
-
-  HomeComponents(BuildContext context) {
-    _context = context;
-  }
-
+  final navigatorKey = NoomiKeys.navKey;
   Widget navGroupMenuWidget() {
     return Wrap(
         spacing: 12.0, // 主轴(水平)方向间距
@@ -58,14 +57,13 @@ class HomeComponents {
             child: Icon(
               data['icon'],
               size: 20.0,
-              color: Theme.of(_context).dividerColor,
+              color: Theme.of(context).dividerColor,
             ),
           ),
         ),
       ),
     );
   }
-
 
   Widget ipsumGroup(Map gou) {
     return Container(
@@ -111,8 +109,8 @@ class HomeComponents {
           Positioned(
             width: 100.0,
             height: 80.0,
-            child:
-            ImgProcessing.svgbannerBg("assets/images/banner_bg.svg", gou['bgiconColor']),
+            child: ImgProcessing.svgbannerBg(
+                "assets/images/banner_bg.svg", gou['bgiconColor']),
           ),
           Positioned(
             top: 31.0,
@@ -182,13 +180,15 @@ class HomeComponents {
     );
   }
 
-
   Widget companyGroup(Map group) {
     List<Map> _listbanexData = group['listbanexData'];
     return Container(
         height: 90.0,
         width: double.infinity,
-        margin: EdgeInsets.only(left: ScreenApdar.setWidth(10.0), right:ScreenApdar.setWidth(10.0), top: ScreenApdar.setHeight(5.0)),
+        margin: EdgeInsets.only(
+            left: ScreenApdar.setWidth(10.0),
+            right: ScreenApdar.setWidth(10.0),
+            top: ScreenApdar.setHeight(5.0)),
         child: Flex(
           direction: Axis.horizontal,
           children: [
@@ -210,7 +210,8 @@ class HomeComponents {
                             width: ScreenApdar.setWidth(20.0),
                             height: ScreenApdar.setHeight(25.0),
                             margin: EdgeInsets.only(top: 5.0),
-                            child: ImgProcessing.svgPictureAsset(url: group['img']),
+                            child: ImgProcessing.svgPictureAsset(
+                                url: group['img']),
                           ),
                           Container(
                             width: ScreenApdar.setWidth(16.0),
@@ -225,7 +226,8 @@ class HomeComponents {
                             width: ScreenApdar.setWidth(13.0),
                             height: ScreenApdar.setHeight(60.0),
                             margin: EdgeInsets.only(top: 10.0),
-                            child: ImgProcessing.svgPictureAsset(url: group['img']),
+                            child: ImgProcessing.svgPictureAsset(
+                                url: group['img']),
                           ),
                         ],
                       ),
@@ -312,7 +314,6 @@ class HomeComponents {
                 ))));
   }
 
-
   Widget getStaggeredView(List goodsList) {
     return SliverStaggeredGrid.countBuilder(
       crossAxisCount: 4,
@@ -368,13 +369,13 @@ class HomeComponents {
   }
 
   Widget productsListView(List expandStateList) {
-   return SliverStaggeredGrid.countBuilder(
+    return SliverStaggeredGrid.countBuilder(
       crossAxisCount: 4,
       mainAxisSpacing: ScreenApdar.setWidth(2.0),
       crossAxisSpacing: ScreenApdar.setHeight(2.0),
       staggeredTileBuilder: (_) => const StaggeredTile.fit(2),
       itemBuilder: (context, index) =>
-          ProductDisplay(expandStateList[index], 6),
+          ProductDisplay(expandStateList[index], 6, this.navigatorKey),
       itemCount: expandStateList.length,
     );
   }
@@ -386,7 +387,7 @@ class HomeComponents {
       right: 0,
       height: 220.0,
       child: Container(
-        color: Theme.of(_context).primaryColor,
+        color: Theme.of(context).primaryColor,
         width: double.infinity,
         height: 220.0,
         child: Stack(
@@ -396,8 +397,7 @@ class HomeComponents {
               top: 50.0,
               width: 120.0,
               height: 80.0,
-              child:  ImgProcessing.svgbannerBg(
-                  "assets/images/banner-shou.svg",
+              child: ImgProcessing.svgbannerBg("assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['fuColor']),
             ),
             Positioned(
@@ -405,8 +405,7 @@ class HomeComponents {
               top: 50.0,
               width: 160.0,
               height: 90.0,
-              child: ImgProcessing.svgbannerBg(
-                  "assets/images/banner-shou.svg",
+              child: ImgProcessing.svgbannerBg("assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['fuColor']),
             ),
             Positioned(
@@ -414,8 +413,7 @@ class HomeComponents {
               top: 0.0,
               width: 250.0,
               height: 180.0,
-              child: ImgProcessing.svgbannerBg(
-                  "assets/images/banner-shou.svg",
+              child: ImgProcessing.svgbannerBg("assets/images/banner-shou.svg",
                   bannerColors[swiperChangedIndex]['maiColor']),
             ),
             Positioned(
@@ -432,66 +430,82 @@ class HomeComponents {
 }
 
 class ProductDisplay extends StatelessWidget {
-  const ProductDisplay(this.source, this.index);
 
   final Map source;
   final int index;
+  final GlobalKey<NavigatorState> _navigatorKey;
+  const ProductDisplay(this.source, this.index, this._navigatorKey);
+
 
   @override
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
       // margin:EdgeInsets.only(left:10.0, right: 10.0),
-      child: Column(
-        children: <Widget>[
-          Image.asset(
-            source['img'],
-            fit: BoxFit.fitHeight,
-          ),
-          // Image.network(source),
-          Padding(
-            padding: EdgeInsets.only(
-              left: ScreenApdar.setWidth(8.0),
-              right: ScreenApdar.setWidth(8.0),
-              bottom: ScreenApdar.setHeight(8.0),
+      child: FlatButton(
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              source['img'],
+              fit: BoxFit.fitHeight,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  child: Text(
-                    source['username'],
-                    style: TextStyle(color: ComponentStyle.INDICATOR_COLOR),
+            // Image.network(source),
+            Padding(
+              padding: EdgeInsets.only(
+                left: ScreenApdar.setWidth(8.0),
+                right: ScreenApdar.setWidth(8.0),
+                bottom: ScreenApdar.setHeight(8.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    child: Text(
+                      source['username'],
+                      style: TextStyle(color: ComponentStyle.INDICATOR_COLOR),
+                    ),
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    verticalDirection: VerticalDirection.up,
-                    children: <Widget>[
-                      Text(
-                        "¥",
-                        style: TextStyle(color: Colors.red, fontSize: 12.0),
-                      ),
-                      Text(
-                        source['price'].toString(),
-                        style: TextStyle(color: Colors.red, fontSize: 20.0),
-                      ),
-                      Text(
-                        '${source['want'].toString()} 人付款',
-                        style: TextStyle(
-                            color: ComponentStyle.DIVIDER_COLOR,
-                            fontSize: 10.0),
-                      ),
-                    ],
+                  Container(
+                    width: double.infinity,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      verticalDirection: VerticalDirection.up,
+                      children: <Widget>[
+                        Text(
+                          "¥",
+                          style: TextStyle(color: Colors.red, fontSize: 12.0),
+                        ),
+                        Text(
+                          source['price'].toString(),
+                          style: TextStyle(color: Colors.red, fontSize: 20.0),
+                        ),
+                        Text(
+                          '${source['want'].toString()} 人付款',
+                          style: TextStyle(
+                              color: ComponentStyle.DIVIDER_COLOR,
+                              fontSize: 10.0),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
+        onPressed: () {
+         /* Navigator.push<String>(context, new MaterialPageRoute(builder: (BuildContext context){
+
+            return new DetailPage(arguments: {
+              "orderId":"123"		//参数map
+            });
+
+          }));*/
+          _navigatorKey.currentState.pushNamed('/detail',arguments: {
+            "id":source['id']		//参数map
+          });
+        },
       ),
     );
   }

@@ -5,13 +5,15 @@ import 'package:flutter_demo/components/marquee.dart';
 import 'package:flutter_demo/components/screenApdar.dart';
 import 'package:flutter_demo/servers/json_servers.dart' show asset;
 import 'package:flutter_demo/style/style.dart';
+import 'package:flutter_demo/components/home_search_page.dart';
 import 'dart:convert';
-
+import 'package:flutter_demo/keys.dart';
 class AppBarWidge extends StatefulWidget {
   double _toolbarHeight;
   double _searchRight;
   double _opacity;
   double _appBarOpacity;
+  final onSearchButtom;
 
   AppBarWidge({
     Key key,
@@ -24,6 +26,7 @@ class AppBarWidge extends StatefulWidget {
     double opacity: 1,
     double expandedHeight: 78,
     double appBarOpacity: 1,
+    this.onSearchButtom,
   })  : _toolbarHeight = ScreenApdar.setHeight(toolbarHeight),
         _searchRight = ScreenApdar.setWidth(
             (initBarHeight - toolbarHeight) * 5 < 100
@@ -42,7 +45,7 @@ class _AppBarWidge extends State<AppBarWidge>
   // AnimationController _controller;
   // Animation _animation;
   List _expandStateList = [];
-
+  MySearchDelegate _delegate;
   void init() async {
     var setData = await asset.get('assets/json/creads.json');
     setState(() {
@@ -54,6 +57,7 @@ class _AppBarWidge extends State<AppBarWidge>
   void initState() {
     init();
     super.initState();
+    _delegate = MySearchDelegate();
     /* _controller = AnimationController(
          duration: Duration(milliseconds : 2), vsync: this);
      _animation = ColorTween(begin: Color(0xFF01EFEB), end: Color(0xFF012831))
@@ -132,49 +136,69 @@ class _AppBarWidge extends State<AppBarWidge>
                   right: widget._searchRight,
                   bottom: ScreenApdar.setHeight(4),
                   child: Container(
-                      height: ScreenApdar.setHeight(25),
+                      height: ScreenApdar.setHeight(27),
                       width: double.infinity,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
                           color: _searchBg,
                           border: Border.all(
-                              color: ComponentStyle.MALL_FOCUS_BG,
+                              color: ComponentStyle.AVERAGE_COLOR,
                               width: 1.0,
                               style: BorderStyle.solid)),
-                      child: Flex(
-                        direction: Axis.horizontal,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                            child: Icon(Icons.search,
-                                size: ScreenApdar.setFontSize(20),
-                                color: ComponentStyle.AVERAGE_COLOR),
-                          ),
-                          Expanded(
-                            flex: 8,
-                            child: Marquee(_expandStateList.length-1,
-                                (BuildContext context, int index) {
-                              return Text(_expandStateList[index]['username'],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color:  ComponentStyle.LINE_COLOR,
-                                      decoration: TextDecoration.none,
-                                      fontSize: 16.0));
-                            }),
-                            /*child: Text('${widget._appBarOpacity}',
+                      child:FlatButton(
+                        child:Flex(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Expanded(
+                              child: Icon(Icons.search,
+                                  size: ScreenApdar.setFontSize(20),
+                                  color: ComponentStyle.AVERAGE_COLOR),
+                            ),
+                            Expanded(
+                              flex: 12,
+                              child:Container(
+                                padding:EdgeInsets.only(top:ScreenApdar.setHeight(3),left:ScreenApdar.setWidth(10) ),
+                                child: Marquee(_expandStateList.length-1,
+                                        (BuildContext context, int index) {
+                                      return Text(_expandStateList[index]['username'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color:  ComponentStyle.LINE_COLOR,
+                                              decoration: TextDecoration.none,
+                                              fontSize:ScreenApdar.setFontSize(16.0) ));
+                                    }),
+                              ),
+
+
+                              /*child: Text('${widget._appBarOpacity}',
                                 style: TextStyle(
                                     color:  _iconBgColor,
                                     decoration: TextDecoration.none,
                                     fontSize: 18.0)),*/
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Icon(Icons.camera_alt,
-                                size: ScreenApdar.setFontSize(20),
-                                color: ComponentStyle.AVERAGE_COLOR),
-                          ),
-                        ],
+                            ),
+                            Expanded(
+                              child: Icon(Icons.camera_alt,
+                                  size: ScreenApdar.setFontSize(20),
+                                  color: ComponentStyle.AVERAGE_COLOR),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          // widget.onSearchButtom();
+                          NoomiKeys.navKey.currentState.pushNamed('/search');
+                       /*   final String selected = await showSearch<String>(
+                            context: context,
+                            delegate: _delegate,
+                          );
+                          if (selected != null) {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('You have selected the aaa: $selected'),
+                              ),
+                            );
+                          }*/
+                        },
                       )),
                 ),
                 Positioned(

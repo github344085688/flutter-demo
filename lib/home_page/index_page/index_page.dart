@@ -14,14 +14,13 @@ import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_demo/servers/json_servers.dart' show asset;
 import 'package:flutter_demo/components/imgProcessing.dart';
+import 'package:flutter_demo/keys.dart';
 
+import 'package:flutter_demo/components/home_search_page.dart';
 import 'package:flutter_demo/my_mine_page/my_mine_page.dart';
 
 class IndexPage extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
-  final GlobalKey<NavigatorState> homeNavigatorKey;
-
-  const IndexPage({Key key, this.navigatorKey, this.homeNavigatorKey})
+  const IndexPage({Key key})
       : super(key: key);
 
   @override
@@ -42,13 +41,11 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
   bool _isPhysics = false;
   bool _isScroll = false;
   SystemUiOverlayStyle _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
-
   List _expandStateList = [];
-
+  var homeComponents;
   ScrollController _scrollController = new ScrollController();
   RefreshController _refreshController = RefreshController();
   GlobalKey _contentKey = GlobalKey();
-
   List _bannerColors = [
     Color.fromRGBO(3, 21, 64, 1),
     Color.fromRGBO(246, 131, 200, 1),
@@ -141,7 +138,7 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
   }
 
   void _onRefresh() async {
-    print('_onRefresh');
+    // print('_onRefresh');
     setState(() {
       _isPhysics = true;
     });
@@ -169,7 +166,7 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
 
   void _funScrollController() {
     _scrollController.addListener(() {
-      print(_scrollController.offset);
+      // print(_scrollController.offset);
       if (_scrollController.offset >= 0 && _scrollController.offset < 19) {
         setState(() {
           _systemUiOverlayStyle = SystemUiOverlayStyle.dark;
@@ -203,13 +200,17 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
     });
   }
 
+  MySearchDelegate _delegate;
   @override
   void initState() {
     init();
+
+    _delegate = MySearchDelegate();
+    homeComponents = HomeComponents(context:context);
     _fuRefreshController();
     _funScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('addPostFrameCallback');
+      // print('addPostFrameCallback');
       _refreshController.position.jumpTo(0);
       setState(() {});
     });
@@ -298,8 +299,8 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
                 SwiperTagesWidget(),
                 /* HomeComponents(context).navGroupMenuWidget(),*/
                 // moudles.map((e) => HomeComponents(context).companyGroup(e)),
-                HomeComponents(context).companyGroup(moudles[0]),
-                HomeComponents(context).companyGroup(moudles[1]),
+                homeComponents.companyGroup(moudles[0]),
+                homeComponents.companyGroup(moudles[1]),
                 Container(
                   width: double.infinity,
                   height: ScreenApdar.setHeight(95.0),
@@ -314,9 +315,12 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
                         child: ImgProcessing.svgPictureAsset(
                             url: 'assets/images/banner_left.svg'),
                         onPressed: () {
+                          NoomiKeys.homeKey.currentState.pushNamed('/detail',arguments: {
+                            "orderId":"6666666"		//参数map
+                          });
                           // Navigator.pushNamed(context, '/page2');
                           // print('ssssssss${widget.navigatorKey}');
-                           widget.navigatorKey.currentState.pushNamed('/myMine');
+                          //  widget.navigatorKey.currentState.pushNamed('/myMine');
                           // _globalNavigatorKey
                           /* Navigator.pushNamed(context, '/myMine');*/
                           /*Navigator.push(
@@ -336,8 +340,11 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
                         child: ImgProcessing.svgPictureAsset(
                             url: 'assets/images/banner_right.svg'),
                         onPressed: () {
-                          widget.homeNavigatorKey.currentState
-                              .pushNamed('/page2');
+                          NoomiKeys.navKey.currentState.pushNamed('/detail',arguments: {
+                            "orderId":"5555"		//参数map
+                          });
+                          /*_navigatorKey.currentState
+                              .pushNamed('/page2');*/
                         },
                       )),
                     ),
@@ -355,11 +362,25 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
               right: ScreenApdar.setWidth(5.0),
               bottom: ScreenApdar.setHeight(30.0),
             ),
-            sliver: HomeComponents(context).productsListView(_expandStateList)),
+            sliver: homeComponents.productsListView(_expandStateList)),
         // HomeComponents(context).productsListView(_expandStateList),
       ],
     );
   }
+
+ void _onSearchButtom() async{
+   final String selected = await showSearch<String>(
+     context: context,
+     delegate: _delegate,
+   );
+   if (selected != null) {
+     Scaffold.of(context).showSnackBar(
+       SnackBar(
+         content: Text('You have selected the aaa: $selected'),
+       ),
+     );
+   }
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -399,7 +420,7 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
               children: [
                 // HomeComponents(context).appBarbg(_swiperChangedIndex),
                 Scaffold(
-                  backgroundColor: Color(0x00000000),
+                  // backgroundColor: Color(0x00000000),
                   body: _getScrollWidget(),
                 ),
                 AppBarWidge(
@@ -409,7 +430,10 @@ class _IndexPage extends State<IndexPage> with TickerProviderStateMixin {
                     searchButtom: _searchButtom,
                     opacity: _opacity,
                     expandedHeight: _expandedHeight,
-                    appBarOpacity: _appBarOpacity)
+                    appBarOpacity: _appBarOpacity,
+                    onSearchButtom:() =>
+                        _onSearchButtom()
+                )
               ],
             )));
   }
