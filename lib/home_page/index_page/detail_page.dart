@@ -67,20 +67,24 @@ class _DetailPage extends State<DetailPage> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Text('Press button to start.');
+              break;
             case ConnectionState.active:
+              break;
             case ConnectionState.waiting:
               // DYdialog.showLoading(context);
               return Text('Awaiting result...');
+              break;
             case ConnectionState.done:
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
-              }
-              ;
+              };
               return _customScrollView(snapshot.data);
-          } // unreachable
+              break;
+          }
+          return Text('Awaiting result...');// unreachable
         },
       ),
-
+      bottomNavigationBar: buildBottomBar()
       /* ,*/
     );
   }
@@ -122,14 +126,7 @@ class _DetailPage extends State<DetailPage> {
                                   color: Colors.black87,
                                   fontSize: ScreenApdar.setFontSize(18.0))),
                         ),
-                        /*  Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text("联想ThinkPad联想ThinkPad联想ThinkPad联想ThinkPad联想ThinkPad联想ThinkPad联想ThinkPad",style: TextStyle(
-                color: Colors.black54,
-                fontSize: ScreenApdar.setFontSize(18.0)
-            )),
-          ),*/
-                        Column(
+                       Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: _datelsPotos),
                         Container(
@@ -352,6 +349,9 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            color: Colors.deepPurple,
+                            splashColor: Colors.deepPurple,
+                            highlightColor: Colors.deepPurple,
                             icon: Icon(
                               Icons.arrow_back_ios,
                               color: this.makeStickyHeaderTextColor(

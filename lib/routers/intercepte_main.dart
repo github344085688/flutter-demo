@@ -77,9 +77,6 @@ class _MyMainAppState extends State<_InitMainState>{
         textTheme: TextTheme(bodyText1: TextStyle(color: ComponentStyle.INDICATOR_COLOR)),),
       // routes: _navigatorKey.routes(), //routes优先执行，所以必须注释掉，否则onGenerateRoute方法不会调用
       onGenerateRoute: _navigatorKey.onGenerateRoute,
-    /*  navigatorObservers:[
-        MyNavigator()
-      ],*/
     );
   }
 }

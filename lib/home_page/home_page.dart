@@ -28,7 +28,7 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _conterollercurrentIndex(BuildContext context, int changedIndex) {
-
+    print(changedIndex);
 
     // if(changedIndex==0&&_privatecurrentIndex!=0) _widgetPage = IndexPage();
     setState(() {

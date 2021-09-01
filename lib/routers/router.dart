@@ -14,8 +14,6 @@ import 'package:flutter_demo/home_page/CheckOut.dart';
 import 'package:flutter_demo/components/home_search_page.dart';
 import 'package:flutter_demo/home_page/home_init/index.dart';
 class NavigatorKey {
-  GlobalKey<NavigatorState> _navigatorKey;
-  GlobalKey<NavigatorState> _indexNavigatorKey;
 
   NavigatorKey();
 
@@ -43,7 +41,6 @@ class NavigatorKey {
       };
 
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    // print('11111111111111111111111111111${settings}');
     final String name = settings.name;
     final routes = this.routes();
     final Function pageContentBuilder = routes[name];
@@ -62,7 +59,6 @@ class NavigatorKey {
   }
 
   Route<dynamic> indexNavigatorRouters(RouteSettings settings) {
-    print('+++++++++++++======${settings}');
     final routes = this.homeRoutes();
     final String name = settings.name;
     final Function pageContentBuilder = routes[name];

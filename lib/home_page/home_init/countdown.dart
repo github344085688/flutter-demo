@@ -1,5 +1,6 @@
 import 'dart:math' as Math;
 
+import 'package:flutter_demo/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,9 +50,9 @@ class _CountdownInit extends State<CountdownInit> with SingleTickerProviderState
 
   void _jumpIndex() {
     Navigator.of(context).pushReplacementNamed('/index');
-    /* Future.delayed(Duration(milliseconds: 300), () {
+     Future.delayed(Duration(milliseconds: 300), () {
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    }); */
+    });
   }
   
   @override
@@ -67,13 +68,13 @@ class _CountdownInit extends State<CountdownInit> with SingleTickerProviderState
     return GestureDetector(
       onTap: _jumpIndex,
       child: Container(
-        width:  50.0,
-        height: 50.0,
+        width:  45.0,
+        height: 45.0,
         decoration: ShapeDecoration(
           color: Color.fromARGB(70, 0, 0, 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(50.0),
+              Radius.circular(45.0),
             ),
           ),
         ),
@@ -82,7 +83,7 @@ class _CountdownInit extends State<CountdownInit> with SingleTickerProviderState
             child: Text(
               '${countNum}s',
               style: TextStyle(
-                color: Colors.white,
+                color: ComponentStyle.AVERAGE_COLOR,
                 fontSize: 16,
               ),
             ),
@@ -109,10 +110,10 @@ class CircleProgressBarPainter extends CustomPainter {
     //   ..strokeWidth = 2.0
     //   ..isAntiAlias = true;
     _paintFore = Paint()
-      ..color = Colors.white
+      ..color = ComponentStyle.TITLE_TEXT_COLOR
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10.0
+      ..strokeWidth = 2.0
       ..isAntiAlias = true;
   }
   @override
