@@ -19,8 +19,8 @@ class NavigatorKey {
 
   routes() => {
         // '/': (context) => NewPage(),
-        '/': (context) => SplashPage(),
-        '/index': (context) => HomePage(),
+        '/': (context) => HomePage(),
+        '/index': (context) => SplashPage(),
         '/detail': (context, {arguments}) => DetailPage(arguments: arguments),
         '/myMine': (context) => MyMinePage(),
         // '/myMine': (context) => MyMinePage(),

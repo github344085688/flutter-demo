@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 class ScreenApdar {
   static init(context) {
     ScreenUtil.init(
@@ -35,8 +32,13 @@ class ScreenApdar {
   static setFontSize(double fontSize) {
     return ScreenUtil().setSp(fontSize);
   }
+
   static statusBarHeight() {
     return ScreenUtil().statusBarHeight;
+  }
+
+  static bottomBarHeight() {
+    return ScreenUtil().bottomBarHeight;
   }
 
   // 初始化设计稿尺寸
