@@ -52,6 +52,7 @@ class _BottomNavigationView extends State<BottomNavigationView>
   @override
   void initState() {
     _initAnimation(ComponentStyle.AVERAGE_COLOR, ComponentStyle.AVERAGE_COLOR);
+    _selectedIndex = widget.currentIndex;
     super.initState();
   }
 
@@ -93,8 +94,9 @@ class _BottomNavigationView extends State<BottomNavigationView>
               padding: EdgeInsets.only(
                 top: ScreenApdar.setHeight(25.0),
               ),
-              child: Row(
+              child: Flex(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                direction: Axis.horizontal,
                 children: navCont
                     .asMap()
                     .entries
@@ -141,11 +143,21 @@ class _BottomNavigationView extends State<BottomNavigationView>
       animationController.forward();
       textStyle = TextStyle(fontSize: 14.0, color: color.value);
     }
-    Widget item = Text(
-      tag['title'],
-      style: textStyle,
+
+    Widget  _container = Expanded(
+      flex: 1,
+      child: Container(
+        alignment: Alignment.center,
+        // width: double.infinity,
+        // height: double.infinity,
+        child:  Text(
+          tag['title'],
+          style: textStyle,
+        ),
+      )
     );
-    return item;
+
+    return _container;
   }
 
   void _handlePressed(int index) {

@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> with TickerProviderStateMixin {
-  int _privatecurrentIndex = 0;
+  int _privatecurrentIndex = 1;
   int _currentIndex = 0;
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -30,9 +30,22 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
 
   _conterollercurrentIndex(BuildContext context, int changedIndex) {
     print(changedIndex);
+    if (_privatecurrentIndex == changedIndex) return;
+    switch(changedIndex){
+      case 1:{
+        NoomiKeys.navKey.currentState.pushNamed('/myMine');
+      }
+      break;
+      default: { print("Invalid choice"); }
+      break;
+
+    }
+
+
 
     // if(changedIndex==0&&_privatecurrentIndex!=0) _widgetPage = IndexPage();
     setState(() {
+
       if (changedIndex == 4 && _privatecurrentIndex != 4) {
         _currentIndex = 1;
         // Navigator.pushNamed(context, '/myMine');
@@ -74,44 +87,16 @@ class _HomePage extends State<HomePage> with TickerProviderStateMixin {
           return false;
         },
         child: Scaffold(
-            body: Text('ss'),
-            /*Navigator(
+            body:
+            Navigator(
               key: NoomiKeys.homeKey,
               // reportsRouteUpdateToEngine: true,
               onGenerateRoute: _indexNavigatorKey.indexNavigatorRouters,
-            ),*/
-            /*
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionBut(
-              currentIndex: _privatecurrentIndex,
-              setActivity: (currentIndex) =>
-                  _conterollercurrentIndex(context, currentIndex)
-          ),
-        ),*/
-            // floatingActionButtonLocation:  FloatingActionButtonLocation.miniCenterDocked,
+            ),
             bottomNavigationBar: BottomNavigationView(
                 currentIndex: _privatecurrentIndex,
                 setActivity: (currentIndex) =>
                     _conterollercurrentIndex(context, currentIndex)),
-
-            /*   PreferredSize(
-          child: BottomNavigationView(
-              currentIndex: _privatecurrentIndex,
-              setActivity: (currentIndex) =>
-                  _conterollercurrentIndex(context, currentIndex)),
-          preferredSize: Size.fromHeight(52.0),
-        ),*/
-
-            //
-            /* BottomNavigationView(
-              currentIndex: _privatecurrentIndex,
-              setActivity: (currentIndex) =>
-                  _conterollercurrentIndex(context, currentIndex)),*/
-
-            // extendBody: true,
-
-            // extendBody: true,
-            /* */
             ));
   }
 }

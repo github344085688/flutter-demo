@@ -44,7 +44,7 @@ class _FluidNavBarButtonState extends State<FluidNavBarButton>
   @override
   void initState() {
       _animationController = AnimationController(
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 300),
         reverseDuration: const Duration(milliseconds: 0),
         vsync: this);
     _animation =
@@ -74,7 +74,7 @@ class _FluidNavBarButtonState extends State<FluidNavBarButton>
   Widget build(context) {
 
       const ne = FluidNavBarButton.nominalExtent;
-    final offsetCurve = _selected ? Curves.elasticOut: Curves.easeIn;
+    final offsetCurve = _selected ? Curves.easeInOut : Curves.easeIn;
     final progress = LinearPointCurve(0.28, 0.0).transform(_animation.value);
 
     final offset = Tween<double>(begin: _defaultOffset, end: _activeOffset)
