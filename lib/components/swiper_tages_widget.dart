@@ -70,15 +70,15 @@ class _SwiperTagesWidget extends State<SwiperTagesWidget> {
           itemBuilder: (BuildContext context, int index) {
             if (_tages.length > 0) {
               return Container(
-                  // margin: EdgeInsets.only(left: 7.0,right: 7.0,top:5.0),
                   child: Wrap(
-                      spacing: 6.0, // 主轴(水平)方向间距
-                      runSpacing: 4.0, // 纵轴（垂直）方向间距
+                      spacing: 6.0,
+                      runSpacing: 4.0,
                       alignment: WrapAlignment.center, //
                       children: _tages[index]
                           .map<Widget>((e) => _navGroupWidget(context, e))
                           .toList()));
             }
+            return null;
           },
         ),
       );
@@ -87,7 +87,8 @@ class _SwiperTagesWidget extends State<SwiperTagesWidget> {
     return Container(
       width:ScreenApdar.setWidth(60),
       // padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: Column(
+      child:
+      Column(
         children: [
           CircleAvatar(
             backgroundColor: ComponentStyle.TITLE_TEXT_COLOR,

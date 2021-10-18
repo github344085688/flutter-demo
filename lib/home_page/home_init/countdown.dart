@@ -18,7 +18,7 @@ class CountdownInit extends StatefulWidget {
 class _CountdownInit extends State<CountdownInit> with SingleTickerProviderStateMixin {
   Animation<double> _animation;         // canvas转动动画函数
   AnimationController _controller;      // canvas转动动画控制器
-  int _time = 5;                        // 首页载入秒数
+  int _time = 1;                        // 首页载入秒数
   
   @override
   void initState() {
